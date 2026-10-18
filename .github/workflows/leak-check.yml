@@ -1,0 +1,28 @@
+# Runs scripts/leak-check.sh on every push and pull request. It fails if anything
+# private is anywhere in the history: secrets, machine-only *.local.md notes, or
+# personal machine paths. Run the same script locally before pushing.
+name: Leak check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  leak-check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4.3.1
+        with:
+          fetch-depth: 0  # full history, so every commit is checked
+
+      - name: Install gitleaks 8.30.1
+        run: |
+          curl -sSfL https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz \
+            | tar -xz gitleaks
+          ./gitleaks version
+
+      - name: Leak check
+        run: GITLEAKS=./gitleaks bash scripts/leak-check.sh

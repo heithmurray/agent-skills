@@ -1,0 +1,14 @@
+# Machine-specific skill notes stay private
+*.local.md
+
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*~
