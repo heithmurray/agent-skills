@@ -1,6 +1,3 @@
-# Machine-specific skill notes stay private
-*.local.md
-
 # Secrets and credentials
 .env
 .env.*

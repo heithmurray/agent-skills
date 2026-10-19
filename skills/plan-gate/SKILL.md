@@ -9,8 +9,6 @@ Make the plan visible before action. A plan is not approval.
 
 Follow AGENTS.md for operating authority, delegation, recovery and reporting. This skill defines the planning gate only; it requires no worker SOP or task-board application.
 
-If this skill's `references/` folder holds any `*.local.md` file, read it too. Local files add detail for one machine or setup and win on those details; they never loosen the rules here.
-
 ## Read-Only Preflight
 
 Inspect what is needed to identify exact targets, existing state and risks. Do not change state or expose secrets during preflight.

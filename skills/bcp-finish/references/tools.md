@@ -2,8 +2,6 @@
 
 How to call the Challenger from each tool. Last checked October 2026 with Claude Code 2.1 and Codex CLI 0.154. Command-line flags change between releases; if one fails, check the tool's own help (`codex exec --help`, `claude --help`) before improvising.
 
-Machine-specific notes (your paths, your login type, problems you've hit) go in a `*.local.md` file in this folder, such as `tools.local.md`. The skill reads it too, and it wins on those details.
-
 ## Pairings
 
 | Builder | Challenger | Command, run from the repo root with the round prompt on stdin |

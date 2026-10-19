@@ -7,8 +7,6 @@ description: Finish real work with a Builder-Challenger pass. The building agent
 
 The finish step for real work. One model built it; a different model attacks it; the Operator makes the call. Based on the Builder-Challenger Protocol v1.7 (`https://github.com/heithmurray/builder-challenger-protocol`, CC BY 4.0, Heith Murray).
 
-If this skill's `references/` folder holds any `*.local.md` file, read it too. Local files add detail for one machine or setup and win on those details; they never loosen the rules here.
-
 ## When
 
 - **Run it** before asking for completion approval on any work beyond a quick change. Don't wait to be asked.

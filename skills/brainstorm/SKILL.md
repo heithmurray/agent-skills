@@ -11,8 +11,6 @@ Use this for unclear objectives, competing approaches, or scope that needs worki
 
 Brainstorm shapes the decision. Plan Gate makes state-changing execution reviewable for approval. Follow AGENTS.md for authority; this skill does not authorize implementation.
 
-If this skill's `references/` folder holds any `*.local.md` file, read it too. Local files add detail for one machine or setup and win on those details; they never loosen the rules here.
-
 ## 1. Research
 
 Extract the objective, constraints, known unknowns, existing assets, and what must not be rebuilt. Inspect available context before asking the user to repeat it. When the choice depends on current system capabilities or settings, inspect the authoritative local configuration, registry, or implementation read-only before requesting screenshots or manual transcription; use user-captured UI evidence only when no direct read-only path exists. For extensible systems, separate catalog presence, default loading, explicit enablement, active configuration, and actual runtime use before recommending cleanup; a large catalog or empty config entry is not proof that the user selected or uses a capability. Label assumptions rather than presenting them as facts.

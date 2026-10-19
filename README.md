@@ -1,33 +1,46 @@
 # Agent Skills
 
-Four skills I use every day to keep AI agents on track: get the idea straight, get the plan approved, keep the answers short, and have a second model check the work before I sign off on it.
+Four skills I use every day to keep AI agents honest and useful. Each one fixes a specific way agents go wrong. Each works on its own: use one, or all four. The one link between them: when brainstorm's brief leads to changes, it hands off to plan-gate if you have it, and says so if you don't.
 
-A skill is a plain-text playbook (a `SKILL.md` file) that an AI agent loads only when the job calls for it. These follow the open [Agent Skills](https://agentskills.io) format, so the same files work in Claude Code, Codex and other tools that read it.
+A skill is a plain-text playbook (a `SKILL.md` file) that an agent loads only when the job calls for it. These follow the open [Agent Skills](https://agentskills.io) format, so they work in Claude Code, Codex and other tools that read it.
 
 — Heith Murray
 
-## The four skills
+## The problems, and the fixes
 
-| Skill | What it does, in plain language |
-|---|---|
-| **brainstorm** | Turns a fuzzy request into a clear assignment. The agent looks at what already exists, compares a few real options, recommends one, and writes a short brief: the goal, what's in and out, what not to rebuild, and how you'll know it's done. It doesn't build anything. |
-| **plan-gate** | Makes the agent show its plan before it changes anything: exactly what it will touch, how it will check the result, and how to undo it. Nothing happens until you approve. A small change gets a short gate; a big one gets the full form. Credentials, servers, publishing, spending and deletes always need your explicit yes. |
-| **onepager** | Cuts a long, list-heavy answer down to two short sections of plain prose: Discussion (what it is) and Analysis (what it means). Same facts, a fraction of the reading. |
-| **bcp-finish** | Before the agent says "done," a different AI model reviews the work, read-only, and tries to find what's wrong. They go back and forth in a fixed format for up to five rounds. If they still disagree, it stops and asks you whether to allow a few more rounds or make the call yourself. You get the list of objections and how each one was settled, and you make the final call. |
+### "The agent ran off and built the wrong thing."
 
-## How they fit together
+You gave it a fuzzy idea, and it filled the gaps with its own guesses.
 
-```
-shape the idea  →  gate the plan  →  distill  →  challenge the finish
-  brainstorm        plan-gate        onepager       bcp-finish
-```
+**[brainstorm](skills/brainstorm/SKILL.md)** turns a fuzzy request into a clear assignment before any work starts. The agent checks what already exists, compares a few real options, recommends one, and writes a short brief: the goal, what's in and out, what not to rebuild, and how you'll know it's done. It builds nothing.
 
-1. **brainstorm** turns "I want something like X" into a brief.
-2. **plan-gate** turns the brief into a plan you approve before any change is made.
-3. **onepager** keeps the reports you read along the way short. Use it anywhere.
-4. **bcp-finish** has a second model challenge the finished work before it comes back to you for go or no-go.
+> *Example:* "I want something to track our leads" becomes a brief that says: use the spreadsheet you already have, add three columns, don't build a CRM, and done means every lead from the website lands there within a day.
 
-Each one works on its own. You don't need all four.
+### "The agent changed things I didn't approve."
+
+It edited files, ran commands or touched a setting, and you only found out afterward.
+
+**[plan-gate](skills/plan-gate/SKILL.md)** makes the agent show its plan before it changes anything: exactly what it will touch, how it will check the result, and how to undo it. Nothing happens until you say go. Small changes get a short gate; big ones get the full form. Passwords, servers, publishing, spending and deletes always need your explicit yes.
+
+> *Example:* before it renames a folder, you see the folder, the three files that point to it, how it will confirm the links still work, and how to put everything back.
+
+### "The answer is too long to read."
+
+You asked a question and got a wall of bullet points, options and caveats.
+
+**[onepager](skills/onepager/SKILL.md)** cuts it down to two short sections of plain prose. **Discussion** says what it is; **Analysis** says what it means. The facts stay, and the padding goes.
+
+> *Example:* a 900-word comparison of three tools becomes two paragraphs that end with which one fits and why.
+
+### "The agent said it was done, and it wasn't."
+
+It sounded confident, and it was wrong.
+
+**[bcp-finish](skills/bcp-finish/SKILL.md)** has a *different* AI model review the work, read-only, before the agent hands it back. The reviewer's job is to find what's wrong. They go back and forth in a fixed format for up to five rounds. If they still disagree, it stops and asks you whether to allow a few more rounds or make the call yourself. You get the list of objections and how each one was settled, and you make the final call.
+
+> *Example from building this repo:* the safety check that scans for leaked passwords looked finished. The reviewing model showed that a password added during a merge would slip past it. The fix was tested, and the reviewer confirmed it before anything was published.
+
+It needs two AI tools installed and signed in: Claude Code calls Codex, or Codex calls Claude. The exact commands are in [`skills/bcp-finish/references/tools.md`](skills/bcp-finish/references/tools.md). With only one tool, it runs a weaker self-review and labels it that way.
 
 ## Install
 
@@ -45,23 +58,23 @@ git clone --depth 1 https://github.com/heithmurray/agent-skills.git && mkdir -p 
 git clone --depth 1 https://github.com/heithmurray/agent-skills.git && mkdir -p ~/.agents/skills && cp -r agent-skills/skills/* ~/.agents/skills/
 ```
 
-On Windows, run these in Git Bash, or in PowerShell use `$HOME\.claude\skills` (or `$HOME\.agents\skills`) with `Copy-Item -Recurse`.
+On Windows, run these in Git Bash. Want just one skill? Copy just that folder.
 
-Want just one skill? Copy just that folder.
+Then ask for a skill by name ("brainstorm this", "plan-gate it", "onepager that", "run BCP"), or call it directly (`/onepager` in Claude Code, `$onepager` in Codex). Agents also pick a skill up on their own when the job matches its description.
 
-Then use it: ask for it by name ("brainstorm this", "plan-gate it", "onepager that", "run BCP"), or call it directly (`/onepager` in Claude Code, `$onepager` in Codex). The agent also picks a skill up on its own when the job matches the skill's description.
+**A tip if you use more than one AI tool:** keep one copy of the skills in a folder you own, and link each tool's skills folder to it. Then an edit you make shows up everywhere, instead of leaving you with three copies that slowly drift apart.
 
 ## Good to know
 
-- **AGENTS.md sets the authority.** brainstorm and plan-gate defer to your project's `AGENTS.md` for who may approve what. If you don't have one, the skills fall back to "ask the human."
-- **bcp-finish needs two tools.** It calls the other model from the command line: Claude Code calls Codex, or Codex calls Claude. Both must be installed and signed in. The exact commands are in `skills/bcp-finish/references/tools.md`. With only one tool, it runs a weaker "self-challenge" and labels it that way.
-- **Make bcp-finish automatic.** Add a line like this to your `AGENTS.md`: *"Finish with a challenge: before calling anything beyond a quick, obvious change done, use the bcp-finish skill and show me the objection ledger."*
-- **Your own machine details go in `.local.md` files.** If a skill's `references/` folder holds a file ending in `.local.md`, the skill reads it as extra detail for your setup. This repo's `.gitignore` keeps those files out of git, so your paths and notes stay private. A leak check (`scripts/leak-check.sh`) looks through the whole history for a committed `.local.md` file, a personal machine path or a secret. GitHub runs it on every push. Run it yourself before pushing (`bash scripts/leak-check.sh`), because once something is pushed to a public repo, deleting it later doesn't take it back.
+- **brainstorm and plan-gate defer to your `AGENTS.md`** (the instructions file many AI tools read) for who may approve what. If you don't have one, they fall back to asking you.
+- **To make bcp-finish automatic,** add a line like this to your `AGENTS.md`: *"Finish with a challenge: before calling anything beyond a quick, obvious change done, use the bcp-finish skill and show me the objection ledger."*
 
 ## Credit
 
-**bcp-finish** puts the [Builder-Challenger Protocol](https://github.com/heithmurray/builder-challenger-protocol) (v1.7, by Heith Murray, licensed [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)) into practice. The protocol has the full rules, the reasoning behind them and a prompt pack for running it by hand.
+bcp-finish puts the [Builder-Challenger Protocol](https://github.com/heithmurray/builder-challenger-protocol) into practice. The protocol has the full rules, the reasoning behind them and a prompt pack for running it by hand.
 
 ## License
 
-© 2026 Heith Murray. Licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/); full text in [LICENSE](LICENSE). You can use, change and share these skills, including in paid work, as long as you credit Heith Murray and link back here.
+[MIT](LICENSE). Use them, change them and share them, including in paid work. Keep the copyright notice.
+
+<sub>This repo runs a leak check (`scripts/leak-check.sh`) on every push. It flags anything private after the push, so it can't take back what's already published. Run it yourself before pushing.</sub>

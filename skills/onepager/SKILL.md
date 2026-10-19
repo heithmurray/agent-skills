@@ -10,8 +10,6 @@ Turn bloated sludge into one clean two-part brief.
 This skill is a compression hammer.
 Use it when the answer got too long, too list-heavy, too repetitive, too option-drunk, or too padded with consultant throat-clearing.
 
-If this skill's `references/` folder holds any `*.local.md` file, read it too. Local files add detail for one machine or setup and win on those details; they never loosen the rules here.
-
 ## Core purpose
 
 Take a topic, answer, or messy explanation and compress it into exactly two prose sections:
